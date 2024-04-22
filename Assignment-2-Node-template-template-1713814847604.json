@@ -1,0 +1,1884 @@
+{
+    "Metadata": {
+        "TemplateId": "arn:aws:cloudformation:us-east-1:635638247318:generatedTemplate/40a7fa13-b1e1-4bfa-807e-d80bae6883ff"
+    },
+    "Resources": {
+        "ElasticLoadBalancingV2TargetGroup00targetgroupassignment2tgb3d357c1fe8477e4001SQAS": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "IpAddressType": "ipv4",
+                "HealthCheckIntervalSeconds": 30,
+                "Matcher": {
+                    "HttpCode": "200"
+                },
+                "HealthCheckPath": "/",
+                "Port": 80,
+                "Targets": [],
+                "HealthCheckEnabled": true,
+                "ProtocolVersion": "HTTP1",
+                "UnhealthyThresholdCount": 2,
+                "HealthCheckTimeoutSeconds": 5,
+                "Name": "assignment2-tg",
+                "VpcId": {
+                    "Ref": "EC2VPC00vpc03ab091f2971e59d600CmK91"
+                },
+                "HealthyThresholdCount": 5,
+                "HealthCheckProtocol": "HTTP",
+                "TargetGroupAttributes": [
+                    {
+                        "Value": "lb_cookie",
+                        "Key": "stickiness.type"
+                    },
+                    {
+                        "Value": "86400",
+                        "Key": "stickiness.app_cookie.duration_seconds"
+                    },
+                    {
+                        "Value": "1",
+                        "Key": "target_group_health.dns_failover.minimum_healthy_targets.count"
+                    },
+                    {
+                        "Value": "use_load_balancer_configuration",
+                        "Key": "load_balancing.cross_zone.enabled"
+                    },
+                    {
+                        "Value": "86400",
+                        "Key": "stickiness.lb_cookie.duration_seconds"
+                    },
+                    {
+                        "Value": "off",
+                        "Key": "target_group_health.dns_failover.minimum_healthy_targets.percentage"
+                    },
+                    {
+                        "Value": "false",
+                        "Key": "stickiness.enabled"
+                    },
+                    {
+                        "Value": "off",
+                        "Key": "target_group_health.unhealthy_state_routing.minimum_healthy_targets.percentage"
+                    },
+                    {
+                        "Value": "0",
+                        "Key": "slow_start.duration_seconds"
+                    },
+                    {
+                        "Value": "300",
+                        "Key": "deregistration_delay.timeout_seconds"
+                    },
+                    {
+                        "Value": "1",
+                        "Key": "target_group_health.unhealthy_state_routing.minimum_healthy_targets.count"
+                    },
+                    {
+                        "Value": "off",
+                        "Key": "load_balancing.algorithm.anomaly_mitigation"
+                    },
+                    {
+                        "Value": "",
+                        "Key": "stickiness.app_cookie.cookie_name"
+                    },
+                    {
+                        "Value": "round_robin",
+                        "Key": "load_balancing.algorithm.type"
+                    }
+                ],
+                "TargetType": "instance",
+                "HealthCheckPort": "traffic-port",
+                "Protocol": "HTTP",
+                "Tags": []
+            }
+        },
+        "EC2SecurityGroup00sg08c633b05333e924500gnQQY": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::SecurityGroup",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "GroupDescription": "allows ssh access",
+                "GroupName": "BastionSG",
+                "VpcId": {
+                    "Ref": "EC2VPC00vpc03ab091f2971e59d600CmK91"
+                },
+                "SecurityGroupIngress": [
+                    {
+                        "CidrIp": "0.0.0.0/0",
+                        "IpProtocol": "tcp",
+                        "FromPort": 22,
+                        "ToPort": 22
+                    }
+                ],
+                "SecurityGroupEgress": [
+                    {
+                        "CidrIp": "0.0.0.0/0",
+                        "IpProtocol": "-1",
+                        "FromPort": -1,
+                        "ToPort": -1
+                    }
+                ],
+                "Tags": [
+                    {
+                        "Value": "BastionSG",
+                        "Key": "Name"
+                    }
+                ]
+            }
+        },
+        "AutoScalingAutoScalingGroup00assignment2asg00pUrBB": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::AutoScaling::AutoScalingGroup",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "LoadBalancerNames": [],
+                "ServiceLinkedRoleARN": "arn:aws:iam::635638247318:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling",
+                "TargetGroupARNs": [
+                    {
+                        "Ref": "ElasticLoadBalancingV2TargetGroup00targetgroupassignment2tg300035407d6100a881ec00L3jTV"
+                    }
+                ],
+                "Cooldown": "300",
+                "AvailabilityZones": [
+                    "us-east-1a",
+                    "us-east-1b",
+                    "us-east-1c"
+                ],
+                "DesiredCapacity": "1",
+                "HealthCheckGracePeriod": 30,
+                "MetricsCollection": [
+                    {
+                        "Granularity": "1Minute",
+                        "Metrics": [
+                            "WarmPoolDesiredCapacity",
+                            "GroupDesiredCapacity",
+                            "WarmPoolPendingCapacity",
+                            "GroupAndWarmPoolDesiredCapacity",
+                            "GroupInServiceCapacity",
+                            "GroupMinSize",
+                            "WarmPoolMinSize",
+                            "GroupPendingCapacity",
+                            "GroupStandbyCapacity",
+                            "WarmPoolTotalCapacity",
+                            "GroupTerminatingInstances",
+                            "GroupInServiceInstances",
+                            "GroupTotalInstances",
+                            "GroupAndWarmPoolTotalCapacity",
+                            "GroupStandbyInstances",
+                            "GroupMaxSize",
+                            "GroupTotalCapacity",
+                            "WarmPoolWarmedCapacity",
+                            "GroupPendingInstances",
+                            "GroupTerminatingCapacity",
+                            "WarmPoolTerminatingCapacity"
+                        ]
+                    }
+                ],
+                "MaxSize": "3",
+                "NewInstancesProtectedFromScaleIn": false,
+                "MinSize": "1",
+                "TerminationPolicies": [
+                    "Default"
+                ],
+                "LaunchTemplate": {
+                    "Version": "$Default",
+                    "LaunchTemplateName": "assignment2-node-cloudwatch-lt",
+                    "LaunchTemplateId": "lt-0b16b510570cb5eb0"
+                },
+                "AutoScalingGroupName": "assignment2-asg",
+                "VPCZoneIdentifier": [
+                    {
+                        "Ref": "EC2Subnet00subnet0a9dec7516571db8800IRYPk"
+                    },
+                    {
+                        "Ref": "EC2Subnet00subnet0eac46ca7987daa3e009wwGD"
+                    },
+                    {
+                        "Ref": "EC2Subnet00subnet0d07ba7c6b47d43fc00sbohe"
+                    }
+                ],
+                "Tags": [
+                    {
+                        "Value": "Node auto-scaled instance",
+                        "Key": "Name",
+                        "PropagateAtLaunch": true
+                    }
+                ],
+                "HealthCheckType": "EC2"
+            }
+        },
+        "EC2SubnetNetworkAclAssociation00aclassoc0756e8493a95c87cb00H0La3": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "NetworkAclId": {
+                    "Ref": "EC2NetworkAcl00acl0bd442c4e60a65a5000yMeLK"
+                },
+                "SubnetId": {
+                    "Ref": "EC2Subnet00subnet0a9dec7516571db8800IRYPk"
+                }
+            }
+        },
+        "ElasticLoadBalancingV2Listener00listenerappassignment2lb58e120db28a44929f4a49d19e19363cb000Sg7i": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::ElasticLoadBalancingV2::Listener",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "MutualAuthentication": {
+                    "Mode": "off"
+                },
+                "SslPolicy": "ELBSecurityPolicy-TLS13-1-2-2021-06",
+                "LoadBalancerArn": {
+                    "Ref": "ElasticLoadBalancingV2LoadBalancer00loadbalancerappassignment2lb58e120db28a4492900f19ch"
+                },
+                "DefaultActions": [
+                    {
+                        "Order": 1,
+                        "TargetGroupArn": {
+                            "Ref": "ElasticLoadBalancingV2TargetGroup00targetgroupassignment2tgb3d357c1fe8477e4001SQAS"
+                        },
+                        "Type": "forward",
+                        "ForwardConfig": {
+                            "TargetGroupStickinessConfig": {
+                                "Enabled": false,
+                                "DurationSeconds": 3600
+                            },
+                            "TargetGroups": [
+                                {
+                                    "TargetGroupArn": {
+                                        "Ref": "ElasticLoadBalancingV2TargetGroup00targetgroupassignment2tgb3d357c1fe8477e4001SQAS"
+                                    },
+                                    "Weight": 1
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "Port": 443,
+                "Certificates": [
+                    {
+                        "CertificateArn": "arn:aws:acm:us-east-1:635638247318:certificate/742d2ee2-28b7-42d2-844f-a3a7702c8ce2"
+                    }
+                ],
+                "Protocol": "HTTPS"
+            }
+        },
+        "EC2RouteTable00rtb05c65b04846b1b8e600HO35P": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::RouteTable",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "EC2VPC00vpc03ab091f2971e59d600CmK91"
+                },
+                "Tags": [
+                    {
+                        "Value": "assignment2-rtb-private2-us-east-1b",
+                        "Key": "Name"
+                    }
+                ]
+            }
+        },
+        "EC2Route00rtb0c4bc7b1b0ad3238000VTysZ": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::Route",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "EC2RouteTable00rtb0c4bc7b1b0ad3238000TGa98"
+                },
+                "DestinationCidrBlock": {
+                    "Fn::GetAtt": [
+                        "EC2VPC00vpc03ab091f2971e59d600CmK91",
+                        "CidrBlock"
+                    ]
+                },
+                "GatewayId": "local",
+                "VpcEndpointId": "local"
+            }
+        },
+        "EC2VolumeAttachment00vol07efc88a1c4051e5500cq0HC": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::VolumeAttachment",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "InstanceId": "i-07c3c787aea82e606",
+                "VolumeId": "vol-07efc88a1c4051e55",
+                "Device": "/dev/xvda"
+            }
+        },
+        "EC2Subnet00subnet0d07ba7c6b47d43fc00sbohe": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::Subnet",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "EC2VPC00vpc03ab091f2971e59d600CmK91"
+                },
+                "MapPublicIpOnLaunch": true,
+                "EnableDns64": false,
+                "AvailabilityZoneId": "use1-az1",
+                "PrivateDnsNameOptionsOnLaunch": {
+                    "EnableResourceNameDnsARecord": false,
+                    "HostnameType": "ip-name",
+                    "EnableResourceNameDnsAAAARecord": false
+                },
+                "CidrBlock": "10.0.0.0/20",
+                "Ipv6Native": false,
+                "Tags": [
+                    {
+                        "Value": "assignment2-subnet-public1-us-east-1a",
+                        "Key": "Name"
+                    }
+                ]
+            }
+        },
+        "EC2Route00rtb0c4bc7b1b0ad3238000RDkM5": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::Route",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "NatGatewayId": {
+                    "Ref": "EC2NatGateway00nat072d4501c44e61ebd005FFbk"
+                },
+                "RouteTableId": {
+                    "Ref": "EC2RouteTable00rtb0c4bc7b1b0ad3238000TGa98"
+                },
+                "DestinationCidrBlock": "0.0.0.0/0"
+            }
+        },
+        "ElasticLoadBalancingV2TargetGroup00targetgroupassignment2tg300035407d6100a881ec00L3jTV": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "IpAddressType": "ipv4",
+                "HealthCheckIntervalSeconds": 30,
+                "Matcher": {
+                    "HttpCode": "200"
+                },
+                "HealthCheckPath": "/",
+                "Port": 3000,
+                "Targets": [
+                    {
+                        "Port": 3000,
+                        "Id": "i-0463e3b71df12ad41"
+                    }
+                ],
+                "HealthCheckEnabled": true,
+                "ProtocolVersion": "HTTP1",
+                "UnhealthyThresholdCount": 2,
+                "HealthCheckTimeoutSeconds": 5,
+                "Name": "assignment2-tg-3000",
+                "VpcId": {
+                    "Ref": "EC2VPC00vpc03ab091f2971e59d600CmK91"
+                },
+                "HealthyThresholdCount": 5,
+                "HealthCheckProtocol": "HTTP",
+                "TargetGroupAttributes": [
+                    {
+                        "Value": "lb_cookie",
+                        "Key": "stickiness.type"
+                    },
+                    {
+                        "Value": "86400",
+                        "Key": "stickiness.app_cookie.duration_seconds"
+                    },
+                    {
+                        "Value": "1",
+                        "Key": "target_group_health.dns_failover.minimum_healthy_targets.count"
+                    },
+                    {
+                        "Value": "use_load_balancer_configuration",
+                        "Key": "load_balancing.cross_zone.enabled"
+                    },
+                    {
+                        "Value": "86400",
+                        "Key": "stickiness.lb_cookie.duration_seconds"
+                    },
+                    {
+                        "Value": "off",
+                        "Key": "target_group_health.dns_failover.minimum_healthy_targets.percentage"
+                    },
+                    {
+                        "Value": "false",
+                        "Key": "stickiness.enabled"
+                    },
+                    {
+                        "Value": "off",
+                        "Key": "target_group_health.unhealthy_state_routing.minimum_healthy_targets.percentage"
+                    },
+                    {
+                        "Value": "0",
+                        "Key": "slow_start.duration_seconds"
+                    },
+                    {
+                        "Value": "300",
+                        "Key": "deregistration_delay.timeout_seconds"
+                    },
+                    {
+                        "Value": "1",
+                        "Key": "target_group_health.unhealthy_state_routing.minimum_healthy_targets.count"
+                    },
+                    {
+                        "Value": "off",
+                        "Key": "load_balancing.algorithm.anomaly_mitigation"
+                    },
+                    {
+                        "Value": "",
+                        "Key": "stickiness.app_cookie.cookie_name"
+                    },
+                    {
+                        "Value": "round_robin",
+                        "Key": "load_balancing.algorithm.type"
+                    }
+                ],
+                "TargetType": "instance",
+                "HealthCheckPort": "traffic-port",
+                "Protocol": "HTTP",
+                "Tags": [
+                    {
+                        "Value": "assignment2-tg-3000",
+                        "Key": "Name"
+                    }
+                ]
+            }
+        },
+        "EC2NetworkAcl00acl0bd442c4e60a65a5000yMeLK": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::NetworkAcl",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "EC2VPC00vpc03ab091f2971e59d600CmK91"
+                },
+                "Tags": []
+            }
+        },
+        "EC2SecurityGroup00sg02f6b46c41443e7d900lJJ1t": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::SecurityGroup",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "GroupDescription": "allows ssh, port 3000 access",
+                "GroupName": "NodeWebServerSG",
+                "VpcId": {
+                    "Ref": "EC2VPC00vpc03ab091f2971e59d600CmK91"
+                },
+                "SecurityGroupIngress": [
+                    {
+                        "CidrIp": "0.0.0.0/0",
+                        "IpProtocol": "tcp",
+                        "FromPort": 22,
+                        "ToPort": 22
+                    },
+                    {
+                        "CidrIp": "0.0.0.0/0",
+                        "IpProtocol": "tcp",
+                        "FromPort": 3000,
+                        "ToPort": 3000
+                    }
+                ],
+                "SecurityGroupEgress": [
+                    {
+                        "CidrIp": "0.0.0.0/0",
+                        "IpProtocol": "-1",
+                        "FromPort": -1,
+                        "ToPort": -1
+                    }
+                ],
+                "Tags": [
+                    {
+                        "Value": "NodeWebServerSG",
+                        "Key": "Name"
+                    }
+                ]
+            }
+        },
+        "EC2SubnetNetworkAclAssociation00aclassoc0a0bbb6d8236c9e6500JgshH": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "NetworkAclId": {
+                    "Ref": "EC2NetworkAcl00acl0bd442c4e60a65a5000yMeLK"
+                },
+                "SubnetId": {
+                    "Ref": "EC2Subnet00subnet0edb10712a7d3c02400trSd2"
+                }
+            }
+        },
+        "EC2Volume00vol07efc88a1c4051e5500owG5S": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::Volume",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "MultiAttachEnabled": false,
+                "SnapshotId": "snap-05df0f277041b9c8f",
+                "VolumeType": "gp3",
+                "Encrypted": false,
+                "Size": 8,
+                "AutoEnableIO": true,
+                "AvailabilityZone": "us-east-1a",
+                "Throughput": 125,
+                "Iops": 3000,
+                "Tags": []
+            }
+        },
+        "EC2RouteTable00rtb0e3327c5663eb64a100Py6dp": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::RouteTable",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "EC2VPC00vpc03ab091f2971e59d600CmK91"
+                },
+                "Tags": [
+                    {
+                        "Value": "assignment2-rtb-public",
+                        "Key": "Name"
+                    }
+                ]
+            }
+        },
+        "EC2VolumeAttachment00vol0e313b0805c48313200vnEWN": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::VolumeAttachment",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "InstanceId": "i-0463e3b71df12ad41",
+                "VolumeId": "vol-0e313b0805c483132",
+                "Device": "/dev/xvda"
+            }
+        },
+        "EC2SubnetRouteTableAssociation00rtbassoc02f08fc8be158d35700Tq3UR": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "EC2RouteTable00rtb04deb02926f06214400e2l5J"
+                },
+                "SubnetId": {
+                    "Ref": "EC2Subnet00subnet0edb10712a7d3c02400trSd2"
+                }
+            }
+        },
+        "EC2Subnet00subnet0cbfaa0f6986d9ba100ivky4": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::Subnet",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "EC2VPC00vpc03ab091f2971e59d600CmK91"
+                },
+                "MapPublicIpOnLaunch": false,
+                "EnableDns64": false,
+                "AvailabilityZoneId": "use1-az4",
+                "PrivateDnsNameOptionsOnLaunch": {
+                    "EnableResourceNameDnsARecord": false,
+                    "HostnameType": "ip-name",
+                    "EnableResourceNameDnsAAAARecord": false
+                },
+                "CidrBlock": "10.0.160.0/20",
+                "Ipv6Native": false,
+                "Tags": [
+                    {
+                        "Value": "assignment2-subnet-private3-us-east-1c",
+                        "Key": "Name"
+                    }
+                ]
+            }
+        },
+        "EC2Route00rtb05c65b04846b1b8e600TbqQL": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::Route",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "NatGatewayId": {
+                    "Ref": "EC2NatGateway00nat072d4501c44e61ebd005FFbk"
+                },
+                "RouteTableId": {
+                    "Ref": "EC2RouteTable00rtb05c65b04846b1b8e600HO35P"
+                },
+                "DestinationCidrBlock": "0.0.0.0/0"
+            }
+        },
+        "EC2NetworkInterface00eni0cc46d71e3eddf70e00qObJC": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::NetworkInterface",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "Description": "",
+                "PrivateIpAddress": "10.0.11.242",
+                "PrivateIpAddresses": [
+                    {
+                        "PrivateIpAddress": "10.0.11.242",
+                        "Primary": true
+                    }
+                ],
+                "SecondaryPrivateIpAddressCount": 0,
+                "Ipv6PrefixCount": 0,
+                "Ipv4Prefixes": [],
+                "Ipv4PrefixCount": 0,
+                "GroupSet": [
+                    "sg-02f6b46c41443e7d9"
+                ],
+                "Ipv6Prefixes": [],
+                "SubnetId": {
+                    "Ref": "EC2Subnet00subnet0d07ba7c6b47d43fc00sbohe"
+                },
+                "SourceDestCheck": true,
+                "InterfaceType": "interface",
+                "Tags": []
+            }
+        },
+        "EC2InternetGateway00igw0cd3c759ebd09417c00PsfxB": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::InternetGateway",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "Tags": [
+                    {
+                        "Value": "assignment2-igw",
+                        "Key": "Name"
+                    }
+                ]
+            }
+        },
+        "EC2Route00rtb0e3327c5663eb64a1000dX2w": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::Route",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "EC2RouteTable00rtb0e3327c5663eb64a100Py6dp"
+                },
+                "DestinationCidrBlock": "0.0.0.0/0",
+                "GatewayId": {
+                    "Ref": "EC2InternetGateway00igw0cd3c759ebd09417c00PsfxB"
+                },
+                "VpcEndpointId": "igw-0cd3c759ebd09417c"
+            }
+        },
+        "EC2Route00rtb04deb02926f06214400tId9L": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::Route",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "EC2RouteTable00rtb04deb02926f06214400e2l5J"
+                },
+                "DestinationCidrBlock": {
+                    "Fn::GetAtt": [
+                        "EC2VPC00vpc03ab091f2971e59d600CmK91",
+                        "CidrBlock"
+                    ]
+                },
+                "GatewayId": "local",
+                "VpcEndpointId": "local"
+            }
+        },
+        "ElasticLoadBalancingV2Listener00listenerappassignment2lb58e120db28a4492920d38e134e150d1c00MPiC2": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::ElasticLoadBalancingV2::Listener",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "MutualAuthentication": {
+                    "Mode": "off"
+                },
+                "SslPolicy": "ELBSecurityPolicy-TLS13-1-2-2021-06",
+                "LoadBalancerArn": {
+                    "Ref": "ElasticLoadBalancingV2LoadBalancer00loadbalancerappassignment2lb58e120db28a4492900f19ch"
+                },
+                "DefaultActions": [
+                    {
+                        "Order": 1,
+                        "TargetGroupArn": {
+                            "Ref": "ElasticLoadBalancingV2TargetGroup00targetgroupassignment2tg300035407d6100a881ec00L3jTV"
+                        },
+                        "Type": "forward",
+                        "ForwardConfig": {
+                            "TargetGroupStickinessConfig": {
+                                "Enabled": false,
+                                "DurationSeconds": 3600
+                            },
+                            "TargetGroups": [
+                                {
+                                    "TargetGroupArn": {
+                                        "Ref": "ElasticLoadBalancingV2TargetGroup00targetgroupassignment2tg300035407d6100a881ec00L3jTV"
+                                    },
+                                    "Weight": 1
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "Port": 3001,
+                "Certificates": [
+                    {
+                        "CertificateArn": "arn:aws:acm:us-east-1:635638247318:certificate/742d2ee2-28b7-42d2-844f-a3a7702c8ce2"
+                    }
+                ],
+                "Protocol": "HTTPS"
+            }
+        },
+        "EC2SubnetNetworkAclAssociation00aclassoc00b59a86c145e131100XXyEb": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "NetworkAclId": {
+                    "Ref": "EC2NetworkAcl00acl0bd442c4e60a65a5000yMeLK"
+                },
+                "SubnetId": {
+                    "Ref": "EC2Subnet00subnet0d07ba7c6b47d43fc00sbohe"
+                }
+            }
+        },
+        "EC2SubnetRouteTableAssociation00rtbassoc0ba7672566f197c8000pRUC9": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "EC2RouteTable00rtb0c4bc7b1b0ad3238000TGa98"
+                },
+                "SubnetId": {
+                    "Ref": "EC2Subnet00subnet0cbfaa0f6986d9ba100ivky4"
+                }
+            }
+        },
+        "EC2Route00rtb04deb02926f06214400BPE6e": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::Route",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "NatGatewayId": {
+                    "Ref": "EC2NatGateway00nat072d4501c44e61ebd005FFbk"
+                },
+                "RouteTableId": {
+                    "Ref": "EC2RouteTable00rtb04deb02926f06214400e2l5J"
+                },
+                "DestinationCidrBlock": "0.0.0.0/0"
+            }
+        },
+        "EC2Instance00i0463e3b71df12ad410020MJY": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::Instance",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "Tenancy": "default",
+                "SecurityGroups": [
+                    "NodeWebServerSG"
+                ],
+                "PrivateIpAddress": "10.0.11.242",
+                "UserData": "IyEvYmluL2Jhc2gKCmVjaG8gIjxiPkluc3RhbmNlIElEOjwvYj4gIiA+IC92YXIvd3d3L2h0bWwvaWQuaHRtbApUT0tFTj1gY3VybCAtWCBQVVQgImh0dHA6Ly8xNjkuMjU0LjE2OS4yNTQvbGF0ZXN0L2FwaS90b2tlbiIgLUggIlgtYXdzLWVjMi1tZXRhZGF0YS10b2tlbi10dGwtc2Vjb25kczogMjE2MDAiYApjdXJsIC1IICJYLWF3cy1lYzItbWV0YWRhdGEtdG9rZW46ICRUT0tFTiIKaHR0cDovLzE2OS4yNTQuMTY5LjI1NC9sYXRlc3QvbWV0YS1kYXRhL2luc3RhbmNlLWlkLyA+PiAvdmFyL3d3dy9odG1sL2lkLmh0bWwKCnN1ZG8gLXUgZWMyLXVzZXIgYmFzaCAtYyAnL2hvbWUvZWMyLXVzZXIvc3RhcnQtbXlhcHAuc2gn",
+                "BlockDeviceMappings": [
+                    {
+                        "Ebs": {
+                            "SnapshotId": "snap-0c7577f47710e745d",
+                            "VolumeType": "gp3",
+                            "Iops": 3000,
+                            "VolumeSize": 8,
+                            "Encrypted": false,
+                            "DeleteOnTermination": true
+                        },
+                        "DeviceName": "/dev/xvda"
+                    }
+                ],
+                "SubnetId": {
+                    "Ref": "EC2Subnet00subnet0d07ba7c6b47d43fc00sbohe"
+                },
+                "EbsOptimized": false,
+                "Volumes": [
+                    {
+                        "VolumeId": "vol-0e313b0805c483132",
+                        "Device": "/dev/xvda"
+                    }
+                ],
+                "LaunchTemplate": {
+                    "Version": "1",
+                    "LaunchTemplateName": "assignment2-node-cloudwatch-lt"
+                },
+                "NetworkInterfaces": [
+                    {
+                        "PrivateIpAddresses": [
+                            {
+                                "PrivateIpAddress": "10.0.11.242",
+                                "Primary": true
+                            }
+                        ],
+                        "SecondaryPrivateIpAddressCount": 0,
+                        "DeviceIndex": "0",
+                        "GroupSet": [
+                            {
+                                "Ref": "EC2SecurityGroup00sg02f6b46c41443e7d900lJJ1t"
+                            }
+                        ],
+                        "Ipv6Addresses": [],
+                        "SubnetId": {
+                            "Ref": "EC2Subnet00subnet0d07ba7c6b47d43fc00sbohe"
+                        },
+                        "AssociatePublicIpAddress": true,
+                        "NetworkInterfaceId": {
+                            "Ref": "EC2NetworkInterface00eni0cc46d71e3eddf70e00qObJC"
+                        },
+                        "DeleteOnTermination": true
+                    }
+                ],
+                "ImageId": "ami-0e8c6e3402ba77b24",
+                "InstanceType": "t2.nano",
+                "Monitoring": true,
+                "Tags": [
+                    {
+                        "Value": "Node auto-scaled instance",
+                        "Key": "Name"
+                    }
+                ],
+                "InstanceInitiatedShutdownBehavior": "stop",
+                "CpuOptions": {
+                    "ThreadsPerCore": 1,
+                    "CoreCount": 1
+                },
+                "AvailabilityZone": "us-east-1a",
+                "PrivateDnsNameOptions": {
+                    "EnableResourceNameDnsARecord": false,
+                    "HostnameType": "ip-name",
+                    "EnableResourceNameDnsAAAARecord": false
+                },
+                "SecurityGroupIds": [
+                    "sg-02f6b46c41443e7d9"
+                ],
+                "DisableApiTermination": false,
+                "KeyName": "newKeyWeek2",
+                "SourceDestCheck": true,
+                "PlacementGroupName": "",
+                "VpcId": "vpc-03ab091f2971e59d6",
+                "CreditSpecification": {
+                    "CPUCredits": "standard"
+                }
+            }
+        },
+        "EC2NetworkInterface00eni0c23a8d0297dc6dcd00Ox5cP": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::NetworkInterface",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "Description": "",
+                "PrivateIpAddress": "10.0.6.134",
+                "PrivateIpAddresses": [
+                    {
+                        "PrivateIpAddress": "10.0.6.134",
+                        "Primary": true
+                    }
+                ],
+                "SecondaryPrivateIpAddressCount": 0,
+                "Ipv6PrefixCount": 0,
+                "Ipv4Prefixes": [],
+                "Ipv4PrefixCount": 0,
+                "GroupSet": [
+                    "sg-08c633b05333e9245"
+                ],
+                "Ipv6Prefixes": [],
+                "SubnetId": {
+                    "Ref": "EC2Subnet00subnet0d07ba7c6b47d43fc00sbohe"
+                },
+                "SourceDestCheck": true,
+                "InterfaceType": "interface",
+                "Tags": []
+            }
+        },
+        "EC2VPC00vpc03ab091f2971e59d600CmK91": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::VPC",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "CidrBlock": "10.0.0.0/16",
+                "EnableDnsSupport": true,
+                "InstanceTenancy": "default",
+                "EnableDnsHostnames": true,
+                "Tags": [
+                    {
+                        "Value": "assignment2-vpc",
+                        "Key": "Name"
+                    }
+                ]
+            }
+        },
+        "EC2SubnetNetworkAclAssociation00aclassoc0bad6dd56440e6dd200aypwy": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "NetworkAclId": {
+                    "Ref": "EC2NetworkAcl00acl0bd442c4e60a65a5000yMeLK"
+                },
+                "SubnetId": {
+                    "Ref": "EC2Subnet00subnet0cbfaa0f6986d9ba100ivky4"
+                }
+            }
+        },
+        "ElasticLoadBalancingV2LoadBalancer00loadbalancerappassignment2lb58e120db28a4492900f19ch": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "IpAddressType": "ipv4",
+                "SecurityGroups": [
+                    "sg-05ae7e01502c41358"
+                ],
+                "LoadBalancerAttributes": [
+                    {
+                        "Value": "",
+                        "Key": "access_logs.s3.prefix"
+                    },
+                    {
+                        "Value": "append",
+                        "Key": "routing.http.xff_header_processing.mode"
+                    },
+                    {
+                        "Value": "true",
+                        "Key": "routing.http2.enabled"
+                    },
+                    {
+                        "Value": "false",
+                        "Key": "waf.fail_open.enabled"
+                    },
+                    {
+                        "Value": "",
+                        "Key": "connection_logs.s3.bucket"
+                    },
+                    {
+                        "Value": "false",
+                        "Key": "access_logs.s3.enabled"
+                    },
+                    {
+                        "Value": "defensive",
+                        "Key": "routing.http.desync_mitigation_mode"
+                    },
+                    {
+                        "Value": "",
+                        "Key": "connection_logs.s3.prefix"
+                    },
+                    {
+                        "Value": "false",
+                        "Key": "routing.http.x_amzn_tls_version_and_cipher_suite.enabled"
+                    },
+                    {
+                        "Value": "false",
+                        "Key": "routing.http.preserve_host_header.enabled"
+                    },
+                    {
+                        "Value": "true",
+                        "Key": "load_balancing.cross_zone.enabled"
+                    },
+                    {
+                        "Value": "false",
+                        "Key": "routing.http.xff_client_port.enabled"
+                    },
+                    {
+                        "Value": "",
+                        "Key": "access_logs.s3.bucket"
+                    },
+                    {
+                        "Value": "false",
+                        "Key": "deletion_protection.enabled"
+                    },
+                    {
+                        "Value": "3600",
+                        "Key": "client_keep_alive.seconds"
+                    },
+                    {
+                        "Value": "false",
+                        "Key": "routing.http.drop_invalid_header_fields.enabled"
+                    },
+                    {
+                        "Value": "false",
+                        "Key": "connection_logs.s3.enabled"
+                    },
+                    {
+                        "Value": "60",
+                        "Key": "idle_timeout.timeout_seconds"
+                    }
+                ],
+                "Subnets": [
+                    {
+                        "Ref": "EC2Subnet00subnet0a9dec7516571db8800IRYPk"
+                    },
+                    {
+                        "Ref": "EC2Subnet00subnet0eac46ca7987daa3e009wwGD"
+                    },
+                    {
+                        "Ref": "EC2Subnet00subnet0d07ba7c6b47d43fc00sbohe"
+                    }
+                ],
+                "Type": "application",
+                "Scheme": "internet-facing",
+                "EnforceSecurityGroupInboundRulesOnPrivateLinkTraffic": "",
+                "Tags": [],
+                "Name": "assignment2-lb",
+                "SubnetMappings": [
+                    {
+                        "SubnetId": {
+                            "Ref": "EC2Subnet00subnet0d07ba7c6b47d43fc00sbohe"
+                        }
+                    },
+                    {
+                        "SubnetId": {
+                            "Ref": "EC2Subnet00subnet0a9dec7516571db8800IRYPk"
+                        }
+                    },
+                    {
+                        "SubnetId": {
+                            "Ref": "EC2Subnet00subnet0eac46ca7987daa3e009wwGD"
+                        }
+                    }
+                ]
+            }
+        },
+        "EC2RouteTable00rtb0212e25d0da502bf200pKaBb": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::RouteTable",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "EC2VPC00vpc03ab091f2971e59d600CmK91"
+                }
+            }
+        },
+        "EC2RouteTable00rtb0c4bc7b1b0ad3238000TGa98": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::RouteTable",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "EC2VPC00vpc03ab091f2971e59d600CmK91"
+                },
+                "Tags": [
+                    {
+                        "Value": "assignment2-rtb-private3-us-east-1c",
+                        "Key": "Name"
+                    }
+                ]
+            }
+        },
+        "EC2VPCDHCPOptionsAssociation00vpc03ab091f2971e59d600snzHa": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::VPCDHCPOptionsAssociation",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "EC2VPC00vpc03ab091f2971e59d600CmK91"
+                },
+                "DhcpOptionsId": {
+                    "Ref": "EC2DHCPOptions00dopt015de2090e3cc2b1600kb4S5"
+                }
+            }
+        },
+        "EC2Route00rtb0212e25d0da502bf2001ttq4": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::Route",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "EC2RouteTable00rtb0212e25d0da502bf200pKaBb"
+                },
+                "DestinationCidrBlock": {
+                    "Fn::GetAtt": [
+                        "EC2VPC00vpc03ab091f2971e59d600CmK91",
+                        "CidrBlock"
+                    ]
+                },
+                "GatewayId": "local",
+                "VpcEndpointId": "local"
+            }
+        },
+        "EC2RouteTable00rtb04deb02926f06214400e2l5J": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::RouteTable",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "EC2VPC00vpc03ab091f2971e59d600CmK91"
+                },
+                "Tags": [
+                    {
+                        "Value": "assignment2-rtb-private1-us-east-1a",
+                        "Key": "Name"
+                    }
+                ]
+            }
+        },
+        "EC2Subnet00subnet017bf12d9935bedcc00xR1tf": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::Subnet",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "EC2VPC00vpc03ab091f2971e59d600CmK91"
+                },
+                "MapPublicIpOnLaunch": false,
+                "EnableDns64": false,
+                "AvailabilityZoneId": "use1-az2",
+                "PrivateDnsNameOptionsOnLaunch": {
+                    "EnableResourceNameDnsARecord": false,
+                    "HostnameType": "ip-name",
+                    "EnableResourceNameDnsAAAARecord": false
+                },
+                "CidrBlock": "10.0.144.0/20",
+                "Ipv6Native": false,
+                "Tags": [
+                    {
+                        "Value": "assignment2-subnet-private2-us-east-1b",
+                        "Key": "Name"
+                    }
+                ]
+            }
+        },
+        "EC2Subnet00subnet0edb10712a7d3c02400trSd2": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::Subnet",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "EC2VPC00vpc03ab091f2971e59d600CmK91"
+                },
+                "MapPublicIpOnLaunch": false,
+                "EnableDns64": false,
+                "AvailabilityZoneId": "use1-az1",
+                "PrivateDnsNameOptionsOnLaunch": {
+                    "EnableResourceNameDnsARecord": false,
+                    "HostnameType": "ip-name",
+                    "EnableResourceNameDnsAAAARecord": false
+                },
+                "CidrBlock": "10.0.128.0/20",
+                "Ipv6Native": false,
+                "Tags": [
+                    {
+                        "Value": "assignment2-subnet-private1-us-east-1a",
+                        "Key": "Name"
+                    }
+                ]
+            }
+        },
+        "EC2Volume00vol0e313b0805c48313200mZ0eF": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::Volume",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "MultiAttachEnabled": false,
+                "SnapshotId": "snap-0c7577f47710e745d",
+                "VolumeType": "gp3",
+                "Encrypted": false,
+                "Size": 8,
+                "AutoEnableIO": true,
+                "AvailabilityZone": "us-east-1a",
+                "Throughput": 125,
+                "Iops": 3000,
+                "Tags": []
+            }
+        },
+        "EC2Instance00i07c3c787aea82e60600jayLQ": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::Instance",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "Tenancy": "default",
+                "SecurityGroups": [
+                    "BastionSG"
+                ],
+                "PrivateIpAddress": "10.0.6.134",
+                "InstanceInitiatedShutdownBehavior": "stop",
+                "CpuOptions": {
+                    "ThreadsPerCore": 1,
+                    "CoreCount": 1
+                },
+                "BlockDeviceMappings": [
+                    {
+                        "Ebs": {
+                            "SnapshotId": "snap-05df0f277041b9c8f",
+                            "VolumeType": "gp3",
+                            "Iops": 3000,
+                            "VolumeSize": 8,
+                            "Encrypted": false,
+                            "DeleteOnTermination": true
+                        },
+                        "DeviceName": "/dev/xvda"
+                    }
+                ],
+                "AvailabilityZone": "us-east-1a",
+                "PrivateDnsNameOptions": {
+                    "EnableResourceNameDnsARecord": false,
+                    "HostnameType": "ip-name",
+                    "EnableResourceNameDnsAAAARecord": false
+                },
+                "SubnetId": {
+                    "Ref": "EC2Subnet00subnet0d07ba7c6b47d43fc00sbohe"
+                },
+                "SecurityGroupIds": [
+                    "sg-08c633b05333e9245"
+                ],
+                "EbsOptimized": false,
+                "DisableApiTermination": false,
+                "KeyName": "newKeyWeek2",
+                "SourceDestCheck": true,
+                "Volumes": [
+                    {
+                        "VolumeId": "vol-07efc88a1c4051e55",
+                        "Device": "/dev/xvda"
+                    }
+                ],
+                "PlacementGroupName": "",
+                "VpcId": "vpc-03ab091f2971e59d6",
+                "NetworkInterfaces": [
+                    {
+                        "PrivateIpAddresses": [
+                            {
+                                "PrivateIpAddress": "10.0.6.134",
+                                "Primary": true
+                            }
+                        ],
+                        "SecondaryPrivateIpAddressCount": 0,
+                        "DeviceIndex": "0",
+                        "GroupSet": [
+                            {
+                                "Ref": "EC2SecurityGroup00sg08c633b05333e924500gnQQY"
+                            }
+                        ],
+                        "Ipv6Addresses": [],
+                        "SubnetId": {
+                            "Ref": "EC2Subnet00subnet0d07ba7c6b47d43fc00sbohe"
+                        },
+                        "AssociatePublicIpAddress": true,
+                        "NetworkInterfaceId": {
+                            "Ref": "EC2NetworkInterface00eni0c23a8d0297dc6dcd00Ox5cP"
+                        },
+                        "DeleteOnTermination": true
+                    }
+                ],
+                "ImageId": "ami-04e5276ebb8451442",
+                "InstanceType": "t2.nano",
+                "Monitoring": true,
+                "Tags": [
+                    {
+                        "Value": "Bastion WS",
+                        "Key": "Name"
+                    }
+                ],
+                "CreditSpecification": {
+                    "CPUCredits": "standard"
+                }
+            }
+        },
+        "EC2SubnetRouteTableAssociation00rtbassoc0feff833b13c06bb100EE1Qx": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "EC2RouteTable00rtb05c65b04846b1b8e600HO35P"
+                },
+                "SubnetId": {
+                    "Ref": "EC2Subnet00subnet017bf12d9935bedcc00xR1tf"
+                }
+            }
+        },
+        "EC2SubnetRouteTableAssociation00rtbassoc08dd040a4d097fcd700LmURr": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "EC2RouteTable00rtb0e3327c5663eb64a100Py6dp"
+                },
+                "SubnetId": {
+                    "Ref": "EC2Subnet00subnet0d07ba7c6b47d43fc00sbohe"
+                }
+            }
+        },
+        "ElasticLoadBalancingV2Listener00listenerappassignment2lb58e120db28a4492951317fe9325567b100rjHlK": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::ElasticLoadBalancingV2::Listener",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "Protocol": "HTTP",
+                "LoadBalancerArn": {
+                    "Ref": "ElasticLoadBalancingV2LoadBalancer00loadbalancerappassignment2lb58e120db28a4492900f19ch"
+                },
+                "DefaultActions": [
+                    {
+                        "TargetGroupArn": {
+                            "Ref": "ElasticLoadBalancingV2TargetGroup00targetgroupassignment2tgb3d357c1fe8477e4001SQAS"
+                        },
+                        "Type": "forward",
+                        "ForwardConfig": {
+                            "TargetGroupStickinessConfig": {
+                                "Enabled": false
+                            },
+                            "TargetGroups": [
+                                {
+                                    "TargetGroupArn": {
+                                        "Ref": "ElasticLoadBalancingV2TargetGroup00targetgroupassignment2tgb3d357c1fe8477e4001SQAS"
+                                    },
+                                    "Weight": 1
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "Port": 80
+            }
+        },
+        "EC2Subnet00subnet0a9dec7516571db8800IRYPk": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::Subnet",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "EC2VPC00vpc03ab091f2971e59d600CmK91"
+                },
+                "MapPublicIpOnLaunch": true,
+                "EnableDns64": false,
+                "AvailabilityZoneId": "use1-az4",
+                "PrivateDnsNameOptionsOnLaunch": {
+                    "EnableResourceNameDnsARecord": false,
+                    "HostnameType": "ip-name",
+                    "EnableResourceNameDnsAAAARecord": false
+                },
+                "CidrBlock": "10.0.32.0/20",
+                "Ipv6Native": false,
+                "Tags": [
+                    {
+                        "Value": "assignment2-subnet-public3-us-east-1c",
+                        "Key": "Name"
+                    }
+                ]
+            }
+        },
+        "EC2SubnetNetworkAclAssociation00aclassoc09eaa7a70c78a0c4a001wQGX": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "NetworkAclId": {
+                    "Ref": "EC2NetworkAcl00acl0bd442c4e60a65a5000yMeLK"
+                },
+                "SubnetId": {
+                    "Ref": "EC2Subnet00subnet017bf12d9935bedcc00xR1tf"
+                }
+            }
+        },
+        "EC2SecurityGroup00sg0f993ec81621d3d9500hif0I": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::SecurityGroup",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "GroupDescription": "allows ssh, http, https access ",
+                "GroupName": "WebServerSG",
+                "VpcId": {
+                    "Ref": "EC2VPC00vpc03ab091f2971e59d600CmK91"
+                },
+                "SecurityGroupIngress": [
+                    {
+                        "CidrIp": "0.0.0.0/0",
+                        "IpProtocol": "tcp",
+                        "FromPort": 80,
+                        "ToPort": 80
+                    },
+                    {
+                        "CidrIp": "0.0.0.0/0",
+                        "IpProtocol": "tcp",
+                        "FromPort": 22,
+                        "ToPort": 22
+                    },
+                    {
+                        "CidrIp": "0.0.0.0/0",
+                        "IpProtocol": "tcp",
+                        "FromPort": 443,
+                        "ToPort": 443
+                    }
+                ],
+                "SecurityGroupEgress": [
+                    {
+                        "CidrIp": "0.0.0.0/0",
+                        "IpProtocol": "-1",
+                        "FromPort": -1,
+                        "ToPort": -1
+                    }
+                ],
+                "Tags": [
+                    {
+                        "Value": "WebServerSG",
+                        "Key": "Name"
+                    }
+                ]
+            }
+        },
+        "ElasticLoadBalancingV2Listener00listenerappassignment2lb58e120db28a44929af9fe29295b9526d00cGUoU": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::ElasticLoadBalancingV2::Listener",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "Protocol": "HTTP",
+                "LoadBalancerArn": {
+                    "Ref": "ElasticLoadBalancingV2LoadBalancer00loadbalancerappassignment2lb58e120db28a4492900f19ch"
+                },
+                "DefaultActions": [
+                    {
+                        "Order": 1,
+                        "TargetGroupArn": {
+                            "Ref": "ElasticLoadBalancingV2TargetGroup00targetgroupassignment2tg300035407d6100a881ec00L3jTV"
+                        },
+                        "Type": "forward",
+                        "ForwardConfig": {
+                            "TargetGroupStickinessConfig": {
+                                "Enabled": false,
+                                "DurationSeconds": 3600
+                            },
+                            "TargetGroups": [
+                                {
+                                    "TargetGroupArn": {
+                                        "Ref": "ElasticLoadBalancingV2TargetGroup00targetgroupassignment2tg300035407d6100a881ec00L3jTV"
+                                    },
+                                    "Weight": 1
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "Port": 3000
+            }
+        },
+        "EC2VolumeAttachment00vol00906589bb0bdefad00HWpVk": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::VolumeAttachment",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "InstanceId": "i-0eb7993525ad88760",
+                "VolumeId": "vol-00906589bb0bdefad",
+                "Device": "/dev/xvda"
+            }
+        },
+        "EC2NatGateway00nat072d4501c44e61ebd005FFbk": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::NatGateway",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "PrivateIpAddress": "10.0.5.3",
+                "ConnectivityType": "public",
+                "VpcId": "vpc-03ab091f2971e59d6",
+                "EniId": "eni-015b8f3c86c5cc70f",
+                "AllocationId": "eipalloc-078fe67a166eb8fd6",
+                "SubnetId": {
+                    "Ref": "EC2Subnet00subnet0d07ba7c6b47d43fc00sbohe"
+                },
+                "Tags": [
+                    {
+                        "Value": "assignment2-nat-public1-us-east-1a",
+                        "Key": "Name"
+                    }
+                ]
+            }
+        },
+        "EC2Subnet00subnet0eac46ca7987daa3e009wwGD": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::Subnet",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "EC2VPC00vpc03ab091f2971e59d600CmK91"
+                },
+                "MapPublicIpOnLaunch": true,
+                "EnableDns64": false,
+                "AvailabilityZoneId": "use1-az2",
+                "PrivateDnsNameOptionsOnLaunch": {
+                    "EnableResourceNameDnsARecord": false,
+                    "HostnameType": "ip-name",
+                    "EnableResourceNameDnsAAAARecord": false
+                },
+                "CidrBlock": "10.0.16.0/20",
+                "Ipv6Native": false,
+                "Tags": [
+                    {
+                        "Value": "assignment2-subnet-public2-us-east-1b",
+                        "Key": "Name"
+                    }
+                ]
+            }
+        },
+        "EC2SubnetRouteTableAssociation00rtbassoc017cef495cf72530700MT9O3": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "EC2RouteTable00rtb0e3327c5663eb64a100Py6dp"
+                },
+                "SubnetId": {
+                    "Ref": "EC2Subnet00subnet0eac46ca7987daa3e009wwGD"
+                }
+            }
+        },
+        "EC2Instance00i0eb7993525ad8876000H733p": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::Instance",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "Tenancy": "default",
+                "SecurityGroups": [
+                    "dbServerSG"
+                ],
+                "PrivateIpAddress": "10.0.128.235",
+                "UserData": "IyEvYmluL2Jhc2gKc3VkbyBtb25nb2QgLWRicGF0aCBkYiAtLWJpbmRfaXBfYWxs",
+                "InstanceInitiatedShutdownBehavior": "stop",
+                "CpuOptions": {
+                    "ThreadsPerCore": 1,
+                    "CoreCount": 1
+                },
+                "BlockDeviceMappings": [
+                    {
+                        "Ebs": {
+                            "SnapshotId": "snap-05df0f277041b9c8f",
+                            "VolumeType": "gp3",
+                            "Iops": 3000,
+                            "VolumeSize": 8,
+                            "Encrypted": false,
+                            "DeleteOnTermination": true
+                        },
+                        "DeviceName": "/dev/xvda"
+                    }
+                ],
+                "AvailabilityZone": "us-east-1a",
+                "PrivateDnsNameOptions": {
+                    "EnableResourceNameDnsARecord": false,
+                    "HostnameType": "ip-name",
+                    "EnableResourceNameDnsAAAARecord": false
+                },
+                "SubnetId": {
+                    "Ref": "EC2Subnet00subnet0edb10712a7d3c02400trSd2"
+                },
+                "SecurityGroupIds": [
+                    "sg-04ebafea13fce1e9e"
+                ],
+                "EbsOptimized": false,
+                "DisableApiTermination": false,
+                "KeyName": "newKeyWeek2",
+                "SourceDestCheck": true,
+                "Volumes": [
+                    {
+                        "VolumeId": "vol-00906589bb0bdefad",
+                        "Device": "/dev/xvda"
+                    }
+                ],
+                "PlacementGroupName": "",
+                "VpcId": "vpc-03ab091f2971e59d6",
+                "NetworkInterfaces": [
+                    {
+                        "PrivateIpAddresses": [
+                            {
+                                "PrivateIpAddress": "10.0.128.235",
+                                "Primary": true
+                            }
+                        ],
+                        "SecondaryPrivateIpAddressCount": 0,
+                        "DeviceIndex": "0",
+                        "GroupSet": [
+                            {
+                                "Ref": "EC2SecurityGroup00sg04ebafea13fce1e9e00ZMHkf"
+                            }
+                        ],
+                        "Ipv6Addresses": [],
+                        "SubnetId": {
+                            "Ref": "EC2Subnet00subnet0edb10712a7d3c02400trSd2"
+                        },
+                        "NetworkInterfaceId": {
+                            "Ref": "EC2NetworkInterface00eni08f383d5145d10aca00r09J9"
+                        },
+                        "DeleteOnTermination": true
+                    }
+                ],
+                "ImageId": "ami-04e5276ebb8451442",
+                "InstanceType": "t2.nano",
+                "Monitoring": true,
+                "Tags": [
+                    {
+                        "Value": "Mongo DB WS",
+                        "Key": "Name"
+                    }
+                ],
+                "CreditSpecification": {
+                    "CPUCredits": "standard"
+                }
+            }
+        },
+        "EC2Route00rtb0e3327c5663eb64a100INg37": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::Route",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "EC2RouteTable00rtb0e3327c5663eb64a100Py6dp"
+                },
+                "DestinationCidrBlock": {
+                    "Fn::GetAtt": [
+                        "EC2VPC00vpc03ab091f2971e59d600CmK91",
+                        "CidrBlock"
+                    ]
+                },
+                "GatewayId": "local",
+                "VpcEndpointId": "local"
+            }
+        },
+        "EC2SubnetRouteTableAssociation00rtbassoc0ed10b911d5acd14300cJFyR": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "EC2RouteTable00rtb0e3327c5663eb64a100Py6dp"
+                },
+                "SubnetId": {
+                    "Ref": "EC2Subnet00subnet0a9dec7516571db8800IRYPk"
+                }
+            }
+        },
+        "EC2SecurityGroup00sg04ebafea13fce1e9e00ZMHkf": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::SecurityGroup",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "GroupDescription": "allows ssh, http, https, mongo access",
+                "GroupName": "dbServerSG",
+                "VpcId": {
+                    "Ref": "EC2VPC00vpc03ab091f2971e59d600CmK91"
+                },
+                "SecurityGroupIngress": [
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": 1433,
+                        "SourceSecurityGroupId": "sg-0f993ec81621d3d95",
+                        "ToPort": 1433,
+                        "SourceSecurityGroupOwnerId": "635638247318"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": 22,
+                        "SourceSecurityGroupId": "sg-08c633b05333e9245",
+                        "ToPort": 22,
+                        "SourceSecurityGroupOwnerId": "635638247318"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": 27017,
+                        "SourceSecurityGroupId": "sg-0f993ec81621d3d95",
+                        "ToPort": 27017,
+                        "SourceSecurityGroupOwnerId": "635638247318"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": 27017,
+                        "SourceSecurityGroupId": "sg-02f6b46c41443e7d9",
+                        "ToPort": 27017,
+                        "SourceSecurityGroupOwnerId": "635638247318"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": 3306,
+                        "SourceSecurityGroupId": "sg-0f993ec81621d3d95",
+                        "ToPort": 3306,
+                        "SourceSecurityGroupOwnerId": "635638247318"
+                    }
+                ],
+                "SecurityGroupEgress": [
+                    {
+                        "CidrIp": "0.0.0.0/0",
+                        "IpProtocol": "-1",
+                        "FromPort": -1,
+                        "ToPort": -1
+                    }
+                ],
+                "Tags": [
+                    {
+                        "Value": "dbServerSG",
+                        "Key": "Name"
+                    }
+                ]
+            }
+        },
+        "EC2Route00rtb05c65b04846b1b8e600nMKcb": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::Route",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "EC2RouteTable00rtb05c65b04846b1b8e600HO35P"
+                },
+                "DestinationCidrBlock": {
+                    "Fn::GetAtt": [
+                        "EC2VPC00vpc03ab091f2971e59d600CmK91",
+                        "CidrBlock"
+                    ]
+                },
+                "GatewayId": "local",
+                "VpcEndpointId": "local"
+            }
+        },
+        "EC2DHCPOptions00dopt015de2090e3cc2b1600kb4S5": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::DHCPOptions",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "DomainName": "ec2.internal",
+                "DomainNameServers": [
+                    "AmazonProvidedDNS"
+                ],
+                "Tags": []
+            }
+        },
+        "EC2SubnetNetworkAclAssociation00aclassoc05355a1c1c6f4c564003phlN": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "NetworkAclId": {
+                    "Ref": "EC2NetworkAcl00acl0bd442c4e60a65a5000yMeLK"
+                },
+                "SubnetId": {
+                    "Ref": "EC2Subnet00subnet0eac46ca7987daa3e009wwGD"
+                }
+            }
+        },
+        "EC2SecurityGroup00sg05ae7e01502c413580028ump": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::SecurityGroup",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "GroupDescription": "allows http and https access ",
+                "GroupName": "LoadBalancerSG",
+                "VpcId": {
+                    "Ref": "EC2VPC00vpc03ab091f2971e59d600CmK91"
+                },
+                "SecurityGroupIngress": [
+                    {
+                        "CidrIp": "0.0.0.0/0",
+                        "IpProtocol": "tcp",
+                        "FromPort": 80,
+                        "ToPort": 80
+                    },
+                    {
+                        "CidrIp": "0.0.0.0/0",
+                        "IpProtocol": "tcp",
+                        "FromPort": 3001,
+                        "ToPort": 3001
+                    },
+                    {
+                        "CidrIp": "0.0.0.0/0",
+                        "IpProtocol": "tcp",
+                        "FromPort": 3000,
+                        "ToPort": 3000
+                    },
+                    {
+                        "CidrIp": "0.0.0.0/0",
+                        "IpProtocol": "tcp",
+                        "FromPort": 443,
+                        "ToPort": 443
+                    }
+                ],
+                "SecurityGroupEgress": [
+                    {
+                        "CidrIp": "0.0.0.0/0",
+                        "IpProtocol": "-1",
+                        "FromPort": -1,
+                        "ToPort": -1
+                    }
+                ],
+                "Tags": [
+                    {
+                        "Value": "LoadBalancerSG",
+                        "Key": "Name"
+                    }
+                ]
+            }
+        },
+        "EC2NetworkInterface00eni08f383d5145d10aca00r09J9": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::NetworkInterface",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "Description": "",
+                "PrivateIpAddress": "10.0.128.235",
+                "PrivateIpAddresses": [
+                    {
+                        "PrivateIpAddress": "10.0.128.235",
+                        "Primary": true
+                    }
+                ],
+                "SecondaryPrivateIpAddressCount": 0,
+                "Ipv6PrefixCount": 0,
+                "Ipv4Prefixes": [],
+                "Ipv4PrefixCount": 0,
+                "GroupSet": [
+                    "sg-04ebafea13fce1e9e"
+                ],
+                "Ipv6Prefixes": [],
+                "SubnetId": {
+                    "Ref": "EC2Subnet00subnet0edb10712a7d3c02400trSd2"
+                },
+                "SourceDestCheck": true,
+                "InterfaceType": "interface",
+                "Tags": []
+            }
+        },
+        "EC2Volume00vol00906589bb0bdefad00qjp4H": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::Volume",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "MultiAttachEnabled": false,
+                "SnapshotId": "snap-05df0f277041b9c8f",
+                "VolumeType": "gp3",
+                "Encrypted": false,
+                "Size": 8,
+                "AutoEnableIO": true,
+                "AvailabilityZone": "us-east-1a",
+                "Throughput": 125,
+                "Iops": 3000,
+                "Tags": []
+            }
+        },
+        "EC2SecurityGroup00sg038184bc6bdc2617d00Zadzk": {
+            "UpdateReplacePolicy": "Retain",
+            "Type": "AWS::EC2::SecurityGroup",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "GroupDescription": "default VPC security group",
+                "GroupName": "default",
+                "VpcId": {
+                    "Ref": "EC2VPC00vpc03ab091f2971e59d600CmK91"
+                },
+                "SecurityGroupIngress": [
+                    {
+                        "IpProtocol": "-1",
+                        "FromPort": -1,
+                        "SourceSecurityGroupId": {
+                            "Fn::GetAtt": [
+                                "EC2VPC00vpc03ab091f2971e59d600CmK91",
+                                "DefaultSecurityGroup"
+                            ]
+                        },
+                        "ToPort": -1,
+                        "SourceSecurityGroupOwnerId": "635638247318"
+                    }
+                ],
+                "SecurityGroupEgress": [
+                    {
+                        "CidrIp": "0.0.0.0/0",
+                        "IpProtocol": "-1",
+                        "FromPort": -1,
+                        "ToPort": -1
+                    }
+                ]
+            }
+        }
+    }
+}
